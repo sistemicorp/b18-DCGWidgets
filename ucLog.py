@@ -388,7 +388,7 @@ class UCLOG(Thread):
 
         self._table.row_config[self._num_rows].show = self._filenames_filter[file] and lvl in self._show_levels
 
-        if self._scroll:
+        if self._scroll and self._table.row_config[self._num_rows].show:
             # throttle scrolling to self.TABLE_SCROLL_TIMEOUT_SEC
             if timer() - self._scroll_last_time > self.TABLE_SCROLL_TIMEOUT_SEC:
                 self._scroll_last_time= timer()
