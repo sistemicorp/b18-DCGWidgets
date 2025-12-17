@@ -1,0 +1,11 @@
+[project]
+name = "b18-dcgwidgets"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "cython>=3.2.2",
+    "dearcygui>=0.1.7",
+    "numpy>=2.3.5",
+    "psutil>=7.1.3",
+]
