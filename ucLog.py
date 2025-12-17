@@ -24,6 +24,7 @@ class UCLOG(Thread):
     WINDOW_TITLE = "ucLog"
     TABLE_MAX_ROWS = 20000
     TABLE_ROWS_DELETE_CHUNK = int(TABLE_MAX_ROWS / 10)  # num rows to purge when MAX exceeded
+    TABLE_SCROLL_TIMEOUT_SEC = 0.1
 
     class Events(IntEnum):
         EVENT_SHUTDOWN = 0
@@ -123,6 +124,8 @@ class UCLOG(Thread):
         self._scale = 1.0
         self._scroll = True
         self._scroll_last_object = None
+        self._scroll_last_time = 0.0
+        self._scroll_timer = None
 
         self._font = dcg.AutoFont.get_monospaced(self._ctx)
         self._theme_font = dcg.ThemeStyleImGui(self._ctx,
@@ -386,7 +389,15 @@ class UCLOG(Thread):
         self._table.row_config[self._num_rows].show = self._filenames_filter[file] and lvl in self._show_levels
 
         if self._scroll:
-            self._scroll_last_object.focus()
+            # throttle scrolling to self.TABLE_SCROLL_TIMEOUT_SEC
+            if timer() - self._scroll_last_time > self.TABLE_SCROLL_TIMEOUT_SEC:
+                self._scroll_last_time= timer()
+                self._scroll_last_object.focus()
+                if self._scroll_timer: self._scroll_timer.cancel()
+
+            elif self._scroll_timer is None:
+                # if no events come in, have a timer to flush
+                self._scroll_timer = Timer(self.TABLE_SCROLL_TIMEOUT_SEC, self._scroll_last_object.focus)
 
         self._num_rows += 1
         if self._num_rows > self.TABLE_MAX_ROWS:

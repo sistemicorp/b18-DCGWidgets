@@ -97,4 +97,4 @@ def build_viewport_menu_bar(C: dcg.Context) -> None:
     # Submit background tasks
     C.queue.submit(cpu_loop)
     C.queue.submit(fps_loop)
-    #C.queue.submit(max_fps_loop)
+    C.queue.submit(max_fps_loop)

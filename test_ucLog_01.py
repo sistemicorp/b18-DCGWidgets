@@ -46,7 +46,7 @@ log_lines = [
     (23, 0.0312848, 'INFO', 'Core/Src/drvr_tmp102.c', 241, 'TMP102 @0x94 25 -> 26 DegC'),
     (24, 0.0314919, 'INFO', 'Core/Src/main.c', 432, 'uptics: 350181, reset reason PO BO PIN SFT '),
 ]
-log_lines *= 1000
+log_lines *= 100  # make larger to load the widget
 log_lines = deque(log_lines)  # uses less CPU
 
 run_thread = True
@@ -57,7 +57,7 @@ def thrd_send_lines(uclog):
         line_to_add = list(log_lines.popleft())
         line_to_add[1] = timer() - timer_started
         uclog.add_log_line(line_to_add)
-        delay = random.uniform(0.01, 0.1)
+        delay = random.uniform(0.01, 0.2)
         time.sleep(delay)
 
     logger.info("end")
