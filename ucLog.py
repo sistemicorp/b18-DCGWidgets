@@ -393,7 +393,9 @@ class UCLOG(Thread):
             if timer() - self._scroll_last_time > self.TABLE_SCROLL_TIMEOUT_SEC:
                 self._scroll_last_time= timer()
                 self._scroll_last_object.focus()
-                if self._scroll_timer: self._scroll_timer.cancel()
+                if self._scroll_timer:
+                    self._scroll_timer.cancel()
+                    self._scroll_timer = None
 
             elif self._scroll_timer is None:
                 # if no events come in, have a timer to flush
